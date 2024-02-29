@@ -105,7 +105,7 @@ if not use_pretrained:
 else:
     model(flat_test[0:2])
     print('Model loaded from directory: {}'.format(model_path))
-    #model.summary()
+    model.summary()
 
 # %%
 # Create a new Double Well model and load the weights of the trained model
@@ -116,38 +116,12 @@ new_model = DoppiaBuca(size=config['Network']['size'],
 
 new_model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
                   loss='mse')
-#new_model1 = DoppiaBuca(size=config['Network']['size'],
-#                       attractors=attractors,
-#                       tmax=t_max,
-#                       **config['DynamicalParameters'])
-
-#new_model1.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
-#                  loss='mse')
-
 new_model(flat_train[0:2])
 new_model.set_weights(model.get_weights())
-
-# %%
 y_pred=new_model(flat_test)
-#mat_shape = (28, 28)
-#input_vec = flat_test[0,:]
-#fig, ax = plt.subplots(3, 1, figsize=(28, 28))
-#ax[0].imshow(input_vec.reshape(mat_shape),cmap='gray')
-#ax[0].set_title('Input', fontsize=60)
-#out_iteration = y_pred[0,:].numpy()
-#ax[1].imshow(out_iteration.reshape(mat_shape),cmap='gray')
-#ax[1].set_title('Output t = {}'.format(new_model.iterations*0.1), fontsize=60)
-#ax[2].imshow(y_test[0, :].reshape(mat_shape),cmap='gray')
-#ax[2].set_title('Target', fontsize=60)
-#plt.tight_layout()
-#plt.savefig('fig_ok'+str(0)+'.jpg')
-#plt.close()
-#sys.exit(-1)
 y_pred2=y_pred
-res1=np.trace(((y_pred/model.a.numpy()) @ (y_test.T/model.a.numpy()))/784)/np.shape(y_test)[0]
 counter=0
 counter_less=0
-#y_pred1=new_model1(flat_test) 
 y_pred2=np.sign(y_pred2)/2.
 for i in range(np.shape(y_test)[0]):
     if  np.sum(np.abs(y_test[i,:]-y_pred2[i,:]))==0.:
@@ -173,36 +147,3 @@ print('accuracy')
 plt.imshow(flat_test[0,:].reshape(28,28))
 plt.savefig('fig_prova.jpg')
 print(model_path, noise, counter/np.shape(y_test)[0], counter_less, (counter+counter_less)/np.shape(y_test)[0], res1)
-sys.exit(-1)
-# Plotting
-for i in range(20):
-    n = np.random.randint(0, len(flat_test))
-    mat_shape = (28, 28)
-    input_vec = flat_test[n:n + 1, :]
-
-    fig, ax = plt.subplots(4, 1, figsize=(28, 28))
-
-# Input vector
-    ax[0].imshow(input_vec.reshape(mat_shape))
-    ax[0].set_title('Input')
-
-# Output of the trained model
-    out = new_model1(input_vec).numpy()
-    ax[1].imshow(out.reshape(mat_shape))
-    ax[1].set_title('Output t = {}'.format(t_max))
-
-# Output of the new model with augmented iterations
-    out_iteration = new_model(input_vec).numpy()
-    ax[2].imshow(out_iteration.reshape(mat_shape))
-    ax[2].set_title('Output t = {}'.format(new_model.iterations))
-
-# Target
-    ax[3].imshow(y_test[n:n + 1, :].reshape(mat_shape))
-    ax[3].set_title('Target')
-
-
-    plt.tight_layout()
-    plt.savefig('fig'+str(i)+'.jpg')
-    plt.show()
-    plt.close()
-
