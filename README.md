@@ -1,1 +1,3 @@
 # EODECA
+
+This repository contains the code for the papers titled "Bridge between Dynamical Systems and Machine Learning: Engineered Ordinary Differential Equations as Classification Algorithm (EODECA)" and "Engineered Ordinary Differential Equations as Classification Algorithm (EODECA): thorough characterization and testing" available on arXiv at: https://arxiv.org/pdf/2311.10387.pdf and https://arxiv.org/pdf/2312.14681.pdf. The papers provide a detailed explanation of the methodologies, experiments, and results. This codebase is intended to facilitate reproducibility of the results and further research in this area.
